@@ -1,0 +1,11 @@
+{"sample_notice":"LAYOUT SAMPLE. Fictional 'Sample Co', not an analysis of any listed company.",
+"business":{"headline":"Sample Co makes components in two segments; Segment A is 62% of revenue.","points":["Segment A 62%, Segment B 38% of revenue [AR p.12]","Top 5 customers 71% of sales [AR p.14]"],"flag":"watch"},
+"financial":{"headline":"Revenue Rs 18,400 cr, EBITDA margin 4.1%, PAT Rs 560 cr (FY25).","points":["Revenue +31% YoY","PAT margin 3.0%"],"flag":"ok"},
+"trajectory":{"headline":"Revenue compounding at 38% over 3 years, margins flat.","points":["Sales CAGR 3y: 38%","OPM change over 3y: +0.4pp"],"flag":"ok"},
+"balance_sheet":{"headline":"Low debt, but working capital is stretching.","points":["D/E 0.12 to 0.18","Debtor days 24 to 41"],"flag":"watch"},
+"cash_quality":{"headline":"Cash conversion weak: 5y CFO is 62% of PAT.","points":["CFO/PAT: 0.4, 0.9, 0.5, 0.7, 0.6","Cum CFO Rs 1,400 cr vs PAT Rs 2,250 cr"],"flag":"red"},
+"narrative_vs_numbers":{"headline":"Volume promises mostly delivered; margin promises missed twice.","points":["Tone confident in 3 of 4 calls","Margin guided 4.5%+, delivered 3.8 to 4.2%"],"flag":"watch",
+"table":[{"quarter":"Q1","promised":"Revenue growth 25%+","delivered":"+31% YoY","verdict":"delivered"},{"quarter":"Q2","promised":"EBITDA margin 4.5%","delivered":"4.0%","verdict":"missed"},{"quarter":"Q3","promised":"Capex Rs 300 cr","delivered":"Not disclosed","verdict":"unclear"},{"quarter":"Q4","promised":"Margin recovery","delivered":"4.2% from 3.9%","verdict":"partial"}]},
+"guidance":{"headline":"Management guides growth, avoids margin numbers.","points":["Revenue growth 25-30% next year","Capex Rs 300 cr"],"flag":"ok","items":[{"metric":"Revenue growth","statement":"25-30%","source":"Q4 call"}]},
+"bull_bear":{"bull":["Growth ahead of guidance","Low leverage","New capacity online"],"bear":["Cash conversion weak","Customer concentration 71%","Margin guidance missed twice"]},
+"numbers":{"quarters":[],"annual":{},"balance":{},"cash":{}},"sources":{"concalls":["sample"],"annual_report":"sample"}}

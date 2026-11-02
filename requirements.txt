@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+httpx
+yfinance
+beautifulsoup4
+lxml
+pypdf
+pydantic

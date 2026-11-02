@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0c0f"><title>FINN</title>
+<style>
+:root{--bg:#0a0c0f;--card:#12161b;--line:#1e242c;--tx:#e8ecf1;--mut:#7d8896;--acc:#c6f24e;--up:#3ddc97;--dn:#ff6b6b;--warn:#ffb84d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+.num{font-variant-numeric:tabular-nums}
+header{position:sticky;top:0;z-index:5;background:rgba(10,12,15,.92);backdrop-filter:blur(10px);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+header h1{font-size:18px;margin:0;letter-spacing:.14em;font-weight:800}
+header h1 b{color:var(--acc)}
+.pill{font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:auto}
+.pill.demo{color:var(--warn);border-color:#5a4318;background:#241a08}
+main{padding:12px 16px}
+.strip{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.tile{flex:0 0 112px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.tile.hot{border-color:#4a5a1b}
+.tile .s{font-size:12px;font-weight:700}.tile .p{font-size:13px;margin-top:2px}
+.up{color:var(--up)}.dn{color:var(--dn)}
+svg.sp{width:100%;height:22px;margin-top:4px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 12px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--mut);padding:6px 12px;border-radius:99px;font-size:13px}
+.chip.on{background:var(--acc);color:#101400;border-color:var(--acc);font-weight:700}
+h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:18px 0 8px;display:flex;justify-content:space-between}
+.card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.card.p1{border-left-color:var(--dn)}.card.p2{border-left-color:var(--warn)}.card.p3{border-left-color:#4b8bff}
+.row{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--mut);flex-wrap:wrap}
+.tk{color:var(--tx);font-weight:800;font-size:13px}
+.cat{padding:1px 7px;border-radius:6px;background:#1b222b;color:#b8c3d1;font-size:11px}
+.hl{margin:6px 0 2px;font-weight:600}.tx{color:#aab4c0;font-size:13px}
+.more{margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{color:var(--mut);font-weight:500;text-align:right;font-size:11px;padding:3px 0}th:first-child,td:first-child{text-align:left}
+td{padding:5px 0;border-top:1px solid var(--line);text-align:right}
+.btn{background:var(--acc);color:#101400;border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:14px}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--tx)}
+input[type=text]{background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--tx);padding:10px;font-size:15px;width:100%}
+input[type=range]{width:100%;accent-color:var(--acc)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(10,12,15,.96);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{flex:1;background:none;border:0;color:var(--mut);padding:12px 0;font-size:12px;position:relative}
+nav button.on{color:var(--acc);font-weight:700}
+.badge{position:absolute;top:6px;margin-left:6px;background:var(--dn);color:#fff;border-radius:99px;font-size:10px;padding:1px 6px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:6px}
+.ok{background:var(--up)}.watch{background:var(--warn)}.red{background:var(--dn)}
+.sec h3{font-size:15px;margin:0 0 6px}.sec ul{margin:6px 0 0;padding-left:18px;color:#aab4c0;font-size:13px}
+.vd{font-size:11px;padding:1px 6px;border-radius:6px}.delivered{background:#12301f;color:var(--up)}.missed{background:#331517;color:var(--dn)}.partial,.unclear{background:#33270f;color:var(--warn)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.muted{color:var(--mut);font-size:12px}.hide{display:none}
+.toggle{width:100%;background:none;border:1px dashed var(--line);color:var(--mut);padding:10px;border-radius:10px}
+.empty{color:var(--mut);text-align:center;padding:30px 0}
+</style></head><body>
+<header><h1>FIN<b>N</b></h1><span id="src" class="pill">...</span></header>
+<main id="m"></main>
+<nav><button data-t="brief" class="on">Brief</button><button data-t="alerts">Alerts<span id="bd" class="badge hide"></span></button><button data-t="research">Research</button></nav>
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const S={tab:"brief",hours:24,cfg:null,open:{},showNoise:false,rs:null,rsym:null};
+const A=JSON.parse(localStorage.getItem("finnA")||'{"vol":2,"move":3,"cats":["results","M&A","management_change","litigation","fund_raise"]}');
+const CATS=["results","M&A","management_change","litigation","fund_raise","credit_rating","dividend","capex","pledging","insider_trading"];
+const api=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error((await r.text()).slice(0,160));return r.json()};
+const ago=t=>{const m=(Date.now()-new Date(t))/6e4;return m<60?Math.round(m)+"m":m<1440?Math.round(m/60)+"h":Math.round(m/1440)+"d"};
+const pc=x=>`<span class="num ${x>=0?'up':'dn'}">${x>=0?'+':''}${x}%</span>`;
+function setSrc(s){const e=$("#src");e.textContent=s==="demo"?"DEMO DATA":s==="live"?"LIVE":s==="snapshot"?"RECORDED SNAPSHOT":s;e.className="pill"+(s==="demo"||s==="snapshot"?" demo":"")}
+function spark(a){const mn=Math.min(...a),mx=Math.max(...a),w=100,h=22;const p=a.map((v,i)=>`${(i/(a.length-1)*w).toFixed(1)},${(h-(v-mn)/(mx-mn||1)*h).toFixed(1)}`).join(" ");
+ return `<svg class="sp" viewBox="0 0 100 22" preserveAspectRatio="none"><polyline fill="none" stroke="${a.at(-1)>=a[0]?'#3ddc97':'#ff6b6b'}" stroke-width="1.5" points="${p}"/></svg>`}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));render()});
+
+function annCard(i){
+ const o=S.open[i.id];
+ return `<div class="card p${i.priority}" data-id="${i.id}"><div class="row"><span class="tk">${i.symbol}</span><span class="cat">${i.category}</span>${i.unusual_move?'<span class="cat" style="color:#c6f24e">price moved</span>':''}<span style="margin-left:auto">${ago(i.ts)}</span></div>
+ <div class="hl">${esc(i.headline)}</div><div class="tx">${esc(i.text.slice(0,160))}</div>
+ ${o?`<div class="more">${o==="loading"?'<span class="muted">Reading the filing...</span>':enrichHTML(o)}</div>`:''}
+ <div class="row" style="margin-top:8px">${i.priority<=3&&!o?`<button class="chip" onclick="enr('${i.id}')">What matters</button>`:''}${i.url?`<a class="chip" style="text-decoration:none" target="_blank" href="${esc(i.url)}">Filing</a>`:''}</div></div>`}
+function enrichHTML(e){
+ if(e.kind==="results"){const M=e.metrics,f=(k,l)=>{const m=M[k];return `<tr><td>${l}</td><td class="num">${m.cur??"n/a"}</td><td>${m.qoq_pct==null?"-":pc(m.qoq_pct)}</td><td>${m.yoy_pct==null?"-":pc(m.yoy_pct)}</td></tr>`};
+  return `<table><tr><th></th><th>${esc(e.unit||"")}</th><th>QoQ</th><th>YoY</th></tr>${f("revenue","Revenue")}${f("ebitda","EBITDA*")}${f("pbt","PBT")}${f("pat","PAT")}</table><div class="muted" style="margin-top:6px">${e.labels&&e.labels.cur?`Compared: ${esc(e.labels.cur)} vs ${esc(e.labels.qoq||"?")} (QoQ) vs ${esc(e.labels.yoy||"?")} (YoY). `:""}${e.warn?`<span class="dn">${esc(e.warn)} </span>`:""}${e.entity||""}. *EBITDA derived as PBT + interest + depreciation - other income${e.bank?"; not meaningful for banks":""}. ${e.demo?"Sample numbers.":""}</div>`}
+ if(e.kind==="mgmt")return `<b>${esc(e.name)}</b> <span class="muted">${esc(e.role||"")} ${esc(e.effective||"")}</span><div class="tx" style="margin-top:4px">${esc(e.bio)}</div>${(e.prior||[]).length?`<div class="muted" style="margin-top:4px">Previously: ${e.prior.map(esc).join(" / ")}</div>`:""}<div class="muted">Web-sourced, unverified.</div>`;
+ if(e.kind==="summary")return esc(e.summary);
+ if(e.kind==="error")return `<span class="dn">${esc(e.error)}</span>`;
+ if(e.error)return esc(e.error);return "Routine."}
+async function enr(id){S.open[id]="loading";render(true);try{S.open[id]=await api("/api/enrich/"+id)}catch(e){S.open[id]={kind:"error",error:e.message}}render(true)}
+
+async function brief(){
+ const [p,d]=await Promise.all([api("/api/prices"),api("/api/digest?hours="+S.hours)]);setSrc(d.meta.source==="demo"||p.meta.source==="demo"?"demo":d.meta.source);
+ const by=n=>d.items.filter(i=>i.priority===n);
+ const sec=(t,l)=>l.length?`<h2><span>${t}</span><span>${l.length}</span></h2>${l.map(annCard).join("")}`:"";
+ const noise=by(4);
+ const moved=p.rows.slice().sort((a,b)=>Math.abs(b.chg_pct)-Math.abs(a.chg_pct));
+ return `<div class="strip">${moved.map(r=>`<div class="tile ${Math.abs(r.chg_pct)>=A.move||r.vol_ratio>=A.vol?'hot':''}"><div class="s">${r.symbol}</div><div class="p num">${r.close} ${pc(r.chg_pct)}</div><div class="muted num">vol ${r.vol_ratio}x</div>${spark(r.spark)}</div>`).join("")}</div>
+ <div class="chips">${[[24,"24h"],[72,"3d"],[168,"7d"]].map(([h,l])=>`<button class="chip ${S.hours===h?'on':''}" onclick="S.hours=${h};render()">${l}</button>`).join("")}<button class="chip" onclick="const v=+prompt('Last how many hours?',S.hours);if(v){S.hours=v;render()}">${[24,72,168].includes(S.hours)?'Custom':S.hours+'h'}</button></div>
+ ${sec("Needs attention",by(1))}${sec("Worth a look",by(2))}${sec("FYI",by(3))}
+ ${d.items.length-noise.length===0?'<div class="empty">Nothing material in this window.</div>':''}
+ ${noise.length?`<button class="toggle" onclick="S.showNoise=!S.showNoise;render()">${S.showNoise?'Hide':'Show'} ${noise.length} routine filings (ESOP, compliance, notices)</button>${S.showNoise?noise.map(annCard).join(""):""}`:""}`}
+
+async function alerts(){
+ const q=`/api/alerts?vol=${A.vol}&move=${A.move}&cats=${encodeURIComponent(A.cats.join(","))}`;const d=await api(q);setSrc(d.meta.source);
+ const n=d.price.length+d.announcements.length;const b=$("#bd");b.textContent=n;b.classList.toggle("hide",!n);
+ return `<div class="card"><div class="hl">What counts as unusual</div>
+ <div class="row" style="margin-top:8px;justify-content:space-between"><span>Volume above</span><b class="num">${A.vol}x avg</b></div><input type="range" min="1.2" max="5" step="0.1" value="${A.vol}" onchange="A.vol=+this.value;sv()">
+ <div class="row" style="margin-top:8px;justify-content:space-between"><span>Daily move beyond</span><b class="num">±${A.move}%</b></div><input type="range" min="1" max="10" step="0.5" value="${A.move}" onchange="A.move=+this.value;sv()">
+ <div class="row" style="margin-top:10px">Announcement types</div><div class="chips">${CATS.map(c=>`<button class="chip ${A.cats.includes(c)?'on':''}" onclick="tg('${c}')">${c}</button>`).join("")}</div></div>
+ <h2><span>Triggered</span><span>${n}</span></h2>
+ ${d.price.map(a=>`<div class="card p${a.kind==="price"?1:2}"><div class="row"><span class="tk">${a.symbol}</span><span class="cat">${a.kind}</span><span style="margin-left:auto">${a.date}</span></div><div class="hl">${a.text}</div></div>`).join("")}
+ ${d.announcements.map(annCard).join("")}${n?"":'<div class="empty">Quiet. Nothing crossed your thresholds.</div>'}`}
+const sv=()=>{localStorage.setItem("finnA",JSON.stringify(A));render()};
+const tg=c=>{A.cats=A.cats.includes(c)?A.cats.filter(x=>x!==c):[...A.cats,c];sv()};
+
+function secHTML(k,t,s){if(!s)return"";return `<div class="card sec"><h3><span class="dot ${s.flag||'ok'}"></span>${t}</h3><div>${esc(s.headline)}</div><ul>${(s.points||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>${s.table?`<table style="margin-top:8px"><tr><th>Qtr</th><th>Promised</th><th>Delivered</th><th></th></tr>${s.table.map(r=>`<tr><td>${esc(r.quarter)}</td><td style="text-align:left">${esc(r.promised)}</td><td style="text-align:left">${esc(r.delivered)}</td><td><span class="vd ${r.verdict}">${r.verdict}</span></td></tr>`).join("")}</table>`:""}</div>`}
+async function runR(sym){S.rsym=sym;S.rs="loading";render(true);try{S.rs=await api("/api/research/"+sym)}catch(e){S.rs={error:e.message}}render(true)}
+async function askQ(){const q=$("#q").value.trim();if(!q||!S.rsym)return;$("#ans").innerHTML='<span class="muted">Searching the filings...</span>';
+ try{const r=await api("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({symbol:S.rsym,question:q})});$("#ans").innerHTML=esc(r.answer)+`<div class="muted" style="margin-top:4px">${r.sources.map(esc).join(" / ")}</div>`}catch(e){$("#ans").textContent=e.message}}
+function research(){
+ const ps=S.cfg.portfolio.map(p=>p.symbol),demo=S.cfg.research_demo;const r=S.rs;let body="";
+ if(r==="loading")body='<div class="empty">Reading annual report and last 4 calls. First run takes a minute, repeats are instant.</div>';
+ else if(r&&r.error)body=`<div class="card dn">${esc(r.error)}</div>`;
+ else if(r)body=(r.demo?`<div class="card" style="border-color:#5a4318"><span class="muted">Layout sample with fictional data. Add GEMINI_API_KEY and unset FINN_DEMO for real analysis.</span></div>`:"")+
+  secHTML("n","Narrative vs numbers",r.narrative_vs_numbers)+secHTML("b","Business",r.business)+secHTML("f","Financials",r.financial)+secHTML("t","Trajectory",r.trajectory)+secHTML("bs","Balance sheet",r.balance_sheet)+secHTML("c","Cash quality",r.cash_quality)+secHTML("g","Guidance",r.guidance)+
+  (r.bull_bear?`<div class="two"><div class="card"><h3 class="up" style="margin:0 0 6px;font-size:14px">Bull</h3><ul style="padding-left:16px;margin:0;font-size:13px">${r.bull_bear.bull.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="card"><h3 class="dn" style="margin:0 0 6px;font-size:14px">Bear</h3><ul style="padding-left:16px;margin:0;font-size:13px">${r.bull_bear.bear.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>`:"")+
+  `<h2><span>Ask the filings</span></h2><div style="display:flex;gap:6px"><input type="text" id="q" placeholder="e.g. what did they say about margins?"><button class="btn" onclick="askQ()">Ask</button></div><div id="ans" class="card tx" style="margin-top:8px"></div>`;
+ return `<h2><span>Demo set</span></h2><div class="chips">${demo.map(s=>`<button class="chip ${S.rsym===s?'on':''}" onclick="runR('${s}')">${s}</button>`).join("")}</div>
+ <h2><span>Any NSE ticker</span></h2><div style="display:flex;gap:6px"><input type="text" id="tk" placeholder="e.g. PIDILITIND" autocapitalize="characters"><button class="btn" onclick="const v=$('#tk').value.trim().toUpperCase();if(v)runR(v)">Go</button></div>
+ <div class="chips" style="margin-top:10px">${ps.filter(x=>!demo.includes(x)).map(s=>`<button class="chip" onclick="runR('${s}')">${s}</button>`).join("")}</div>${body}`}
+
+async function render(keep){const m=$("#m"),y=keep?scrollY:0;
+ try{if(!S.cfg)S.cfg=await api("/api/config");
+  m.innerHTML=S.tab==="brief"?await brief():S.tab==="alerts"?await alerts():research();
+ }catch(e){m.innerHTML=`<div class="card dn">${esc(e.message)}</div>`}scrollTo(0,y)}
+render();
+</script></body></html>
